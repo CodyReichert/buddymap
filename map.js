@@ -1,10 +1,11 @@
-var pinmarker = new google.maps.MarkerImage('/googlemaps/wp-content/themes/mytheme/pin.png', new google.maps.Size(20, 34) );
-
+// Initialize marker info windows
 var infowindow = new google.maps.InfoWindow();
 
+//intialize list of lat/longs and google Bounds for default map zoom
 var latlngLst = [];
 var bounds = new google.maps.LatLngBounds();
 
+//main map function
 function initialize() {
   map = new google.maps.Map(document.getElementById('map'), { 
     zoom: 12, 

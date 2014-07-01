@@ -23,7 +23,19 @@
         <?php $i++; ?>
       <?php endwhile; ?>
     </div>
-    <div id="map" style="width: 100%; height: 100%;"></div>
+    <div id="map" style="width: 50%; height: 50%;"></div>
+    <?php do_action( 'bp_before_directory_members_list' ); ?>
+    <?php if ( bp_has_members( bp_ajax_querystring( 'members') ) ) : ?>
+      <p>Yay, there are members!</p>
+      <?php while ( bp_members() ) : bp_the_member(); ?>
+        <ul>
+          <li><?php bp_member_name(); ?></li>
+          <li><?php bp_member_profile_data('field=address') ?></li>
+        </ul>
+      <?php endwhile; ?>
+    <?php else : ?>
+        <p>Boo, no members found.</p>
+    <?php endif; ?>
   <?php else : ?>
     <!-- Wordpress did not find posts -->
     <h1>Sorry there are no posts to show</h1>
