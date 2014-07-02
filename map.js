@@ -7,19 +7,23 @@ var bounds = new google.maps.LatLngBounds();
 
 //main map function
 function initialize() {
+  //Create new map
   map = new google.maps.Map(document.getElementById('map'), { 
     zoom: 12, 
     center: new google.maps.LatLng(29.760615, -95.364075),
     mapTypeId: google.maps.MapTypeId.ROADMAP 
   });
 
+  //place markers on map
   for (var i=0; i < locations.length; i++) {
     var marker = new google.maps.Marker({
       position: locations[i].latlng,
       map: map
     });
+    //push locations to list for map zooming
     latlngLst.push(marker.position);
 
+    //create info window and open on click
     google.maps.event.addListener(marker, 'click', (function(marker, i) {
       return function() {
         infowindow.setContent(locations[i].info);
@@ -29,8 +33,10 @@ function initialize() {
 
   }
 
+  // create boundries for map zoom
   for (var i=0; i < latlngLst.length; i++) {
    bounds.extend (latlngLst[i]);
   }
+  // fit map to created bounds
   map.fitBounds(bounds); 
 }

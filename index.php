@@ -10,8 +10,10 @@
 <body onload="initialize()">
 
   <?php if ( have_posts() ) : ?>
+
     <!-- Wordpress has matching posts -->
     <h1>Posts found! yay!</h1>
+    <!-- Info windows for map markers -->
     <div style="display: none;">
       <?php $i = 1; ?>
       <?php while ( have_posts() ) : the_post(); ?>
@@ -23,19 +25,25 @@
         <?php $i++; ?>
       <?php endwhile; ?>
     </div>
+
+    <!-- Create map -->
     <div id="map" style="width: 50%; height: 50%;"></div>
-    <?php do_action( 'bp_before_directory_members_list' ); ?>
-    <?php if ( bp_has_members( bp_ajax_querystring( 'members') ) ) : ?>
-      <p>Yay, there are members!</p>
-      <?php while ( bp_members() ) : bp_the_member(); ?>
-        <ul>
-          <li><?php bp_member_name(); ?></li>
-          <li><?php bp_member_profile_data('field=address') ?></li>
-        </ul>
-      <?php endwhile; ?>
-    <?php else : ?>
-        <p>Boo, no members found.</p>
-    <?php endif; ?>
+
+      <!-- Loop through members and get address -->
+    <div id-"members">
+      <?php if ( bp_has_members( bp_ajax_querystring( 'members') ) ) : ?>
+        <p>Yay, there are members!</p>
+        <?php while ( bp_members() ) : bp_the_member(); ?>
+          <ul>
+            <li><?php bp_member_name(); ?></li>
+            <li><?php bp_member_profile_data('field=address') ?></li>
+          </ul>
+        <?php endwhile; ?>
+      <?php else : ?>
+          <p>Boo, no members found.</p>
+      <?php endif; ?>
+    </div>
+
   <?php else : ?>
     <!-- Wordpress did not find posts -->
     <h1>Sorry there are no posts to show</h1>
@@ -44,6 +52,8 @@
   <?php wp_footer(); ?>
 
   <script>
+  <!-- Get latlng field from posts and store it in locations -->
+
     var locations = [
       <?php $i=1; while ( have_posts() ) : the_post(); ?>
         <?php if ( get_post_meta($post->ID, 'latlng', true) !== '' ) : ?>
@@ -54,6 +64,7 @@
         <?php endif; ?>
       <?php $i++; endwhile; ?>
     ];
+
   </script>
     
 </body>
