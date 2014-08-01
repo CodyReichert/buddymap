@@ -2,12 +2,12 @@
 <head>
 
   <title>Google Maps Integration</title>
-  <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
-  <script type="text/javascript" src="<?php echo get_stylesheet_directory_uri() ?>/map.js"></script>
+  <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyCnG2OidRj-9tJe5AN3-gxRy0s_c8qdoCA&sensor=false"></script>
+  <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
   <?php wp_head(); ?>
 
 </head>
-<body onload="initialize()">
+<body>
 
     <!-- Create map -->
     <div id="map" style="width: 50%; height: 50%;"></div>
@@ -48,26 +48,72 @@
 
   <script>
 
-    var addresses = [];
-    function codeAddress() {
-        <?php if ( bp_has_members( bp_ajax_querystring( 'members') ) ) : ?>
-          <?php $i=1; while ( bp_members() ) : bp_the_member(); ?>
-              addresses.push("<?php bp_member_profile_data('field=address') ?>");
-          <?php $i++; endwhile; ?>
-        <?php endif; ?>
-    }
-    codeAddress();
+    //main map function
+    function initialize() {
 
-    var locations = [
-      <?php if ( bp_has_members( bp_ajax_querystring( 'members') ) ) : ?>
-        <?php $i=1; while ( bp_members() ) : bp_the_member(); ?>
-            {
-              latlng: new google.maps.LatLng<?php bp_member_profile_data('field=address') ?>,
-              info : document.getElementById('item<?php echo $i; ?>')
-            },
-        <?php $i++; endwhile; ?>
-      <?php endif; ?>
-    ];
+      var addresses = [];
+      var infos = [];
+      function getAddresses() {
+          <?php if ( bp_has_members( bp_ajax_querystring( 'members') ) ) : ?>
+            <?php $i=1; while ( bp_members() ) : bp_the_member(); ?>
+                addresses.push("<?php bp_member_profile_data('field=address') ?>");
+                infos.push(document.getElementById('item<?php echo $i; ?>'));
+            <?php $i++; endwhile; ?>
+          <?php endif; ?>
+      }
+      getAddresses();
+      console.log(infos);
+
+      // Initialize marker info windows
+      var infowindow = new google.maps.InfoWindow();
+
+      // Initialize geocoder
+      var geocoder = new google.maps.Geocoder();
+
+      //intialize list of lat/longs and google Bounds for default map zoom
+      var locations = [];
+      var bounds = new google.maps.LatLngBounds();
+
+      //Create new map
+      map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 12,
+        center: new google.maps.LatLng(29.760615, -95.364075),
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+      });
+
+      for (var x = 0; x < addresses.length; x++) {
+
+        $.ajaxSetup({
+          async: false
+        });
+        $.getJSON('http://maps.googleapis.com/maps/api/geocode/json?address='+addresses[x]+'&sensor=false', null, function(data, status) {
+          var p = data.results[0].geometry.location;
+          var latlng = new google.maps.LatLng(p.lat, p.lng);
+          locations.push(latlng);
+          console.log(latlng);
+
+          var marker = new google.maps.Marker({
+            position: latlng,
+            map: map
+          });
+
+          bounds.extend(marker.position);
+
+          google.maps.event.addListener(marker, 'click', (function(marker, x) {
+            return function() {
+              infowindow.setContent(infos[x].innerText);
+              infowindow.open(map, marker);
+            };
+          })(marker, x));
+
+        });
+      }
+      $.ajaxSetup({
+        async: true
+      });
+      map.fitBounds(bounds);
+    }
+    initialize();
 
   </script>
 
