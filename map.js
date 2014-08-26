@@ -54,37 +54,3 @@ function initialize() {
       google.maps.event.removeListener(listener);
   });
 }
-    //google.maps.event.addListener(marker, 'click', (function(marker, x) {
-    //  return function() {
-    //    infowindow.setContent(infos[x].innerText);
-    //    infowindow.open(map, marker);
-    //  }
-    //})(marker, x));
-
-
-  // create boundries for map zoom
-  //for (var i=0; i < locations.length; i++) {
-  // bounds.extend(locations[i]);
- // }
-  // fit map to created bounds
- // map.fitBounds(bounds); 
-
-  //place markers on map
-  //for (var i=0; i < latlngLst.length; i++) {
-    //var marker = new google.maps.Marker({
-    //  position: latlngLst[i],
-    //  map: map
-    //});
-
-    //push locations to list for map zooming
-    //latlngLst.push(marker.position);
-
-    //create info window and open on click
-    //google.maps.event.addListener(marker, 'click', (function(marker, i) {
-    //  return function() {
-    //    infowindow.setContent(locations[i].info);
-    //   infowindow.open(map, marker);
-    //  }
-    //})(marker, i));
- // }
-
