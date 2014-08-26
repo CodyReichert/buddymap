@@ -2,7 +2,7 @@
 <head>
 
   <title>Google Maps Integration</title>
-  <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyCnG2OidRj-9tJe5AN3-gxRy0s_c8qdoCA&sensor=false"></script>
+  <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=YOURKEY&sensor=false"></script>
   <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
   <?php wp_head(); ?>
 
